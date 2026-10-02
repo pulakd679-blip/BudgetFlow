@@ -1,0 +1,6 @@
+{
+  "name": "BudgetFlow",
+  "description": "Minimalist and intuitive daily personal finance tracker with income, expense, and daily balance tracking, monthly visualizations, manual receipt scanner, and finance calculators.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

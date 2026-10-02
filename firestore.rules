@@ -1,0 +1,63 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isValidTransaction(data) {
+      return data.keys().hasAll(['id', 'userId', 'title', 'amount', 'type', 'category', 'dateMillis', 'paymentMethod'])
+        && data.id is string && data.id.size() > 0
+        && data.userId is string
+        && data.title is string && data.title.size() > 0 && data.title.size() <= 200
+        && data.amount is number && data.amount >= 0
+        && data.type in ['EXPENSE', 'INCOME', 'TRANSFER']
+        && data.category is string && data.category.size() <= 100
+        && data.dateMillis is number
+        && data.paymentMethod is string && data.paymentMethod.size() <= 50
+        && (!('note' in data) || (data.note == null || (data.note is string && data.note.size() <= 2000)))
+        && (!('receiptUri' in data) || (data.receiptUri == null || data.receiptUri is string))
+        && (!('receiptNote' in data) || (data.receiptNote == null || (data.receiptNote is string && data.receiptNote.size() <= 2000)))
+        && (!('updatedAt' in data) || data.updatedAt is timestamp);
+    }
+
+    function isValidCategoryBudget(data) {
+      return data.keys().hasAll(['category', 'monthlyLimit', 'userId'])
+        && data.category is string && data.category.size() > 0 && data.category.size() <= 100
+        && data.monthlyLimit is number && data.monthlyLimit >= 0
+        && data.userId is string
+        && (!('updatedAt' in data) || data.updatedAt is timestamp);
+    }
+
+    function isValidUserBackupMeta(data) {
+      return data.keys().hasAll(['userId', 'lastBackupMillis', 'transactionCount'])
+        && data.userId is string
+        && data.lastBackupMillis is number
+        && data.transactionCount is number && data.transactionCount >= 0
+        && (!('updatedAt' in data) || data.updatedAt is timestamp);
+    }
+
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create, update: if isOwner(userId) && isValidUserBackupMeta(request.resource.data);
+      allow delete: if isOwner(userId);
+
+      match /transactions/{transactionId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId) && request.resource.data.userId == userId && isValidTransaction(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+
+      match /budgets/{category} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId) && request.resource.data.userId == userId && isValidCategoryBudget(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+    }
+  }
+}

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Center disc glow -->
+    <path
+        android:pathData="M54,54m-28,0a28,28 0,1,1 56,0a28,28 0,1,1 -56,0">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="26"
+                android:startY="26"
+                android:endX="82"
+                android:endY="82"
+                android:type="linear">
+                <item android:color="#3310B981" android:offset="0.0" />
+                <item android:color="#1A065F46" android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <!-- Upward Trend Flow Line (representing Budget and Wealth Growth) -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M32,68 L46,55 L58,62 L76,38" />
+    <!-- Glowing Arrow Tip -->
+    <path
+        android:pathData="M76,38 L65,38 M76,38 L76,49"
+        android:strokeColor="#34D399"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <!-- Gradient Flow Wave Fill beneath the chart line -->
+    <path
+        android:pathData="M32,68 L46,55 L58,62 L76,38 L76,76 L32,76 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="54"
+                android:startY="38"
+                android:endX="54"
+                android:endY="76"
+                android:type="linear">
+                <item android:color="#5534D399" android:offset="0.0" />
+                <item android:color="#0010B981" android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <!-- Floating Currency Flow Indicator (Modern Minimalist Pill / Coin node) -->
+    <path
+        android:pathData="M58,35m-5,0a5,5 0,1,1 10,0a5,5 0,1,1 -10,0"
+        android:fillColor="#10B981" />
+    <path
+        android:pathData="M44,42m-3,0a3,3 0,1,1 6,0a3,3 0,1,1 -6,0"
+        android:fillColor="#6EE7B7" />
+</vector>

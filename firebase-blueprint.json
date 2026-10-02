@@ -1,0 +1,126 @@
+{
+  "entities": {
+    "Transaction": {
+      "title": "Transaction",
+      "description": "A single financial income or expense transaction",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique transaction ID"
+        },
+        "userId": {
+          "type": "string",
+          "description": "The user ID of the owner"
+        },
+        "title": {
+          "type": "string",
+          "description": "Transaction title or merchant name"
+        },
+        "amount": {
+          "type": "number",
+          "description": "Transaction amount in primary currency"
+        },
+        "type": {
+          "type": "string",
+          "description": "Transaction type (EXPENSE, INCOME, TRANSFER)",
+          "enum": ["EXPENSE", "INCOME", "TRANSFER"]
+        },
+        "category": {
+          "type": "string",
+          "description": "Category name"
+        },
+        "dateMillis": {
+          "type": "number",
+          "description": "Timestamp in milliseconds when transaction occurred"
+        },
+        "note": {
+          "type": "string",
+          "description": "Optional notes or details"
+        },
+        "paymentMethod": {
+          "type": "string",
+          "description": "Payment method used (Cash, Credit Card, etc)"
+        },
+        "receiptUri": {
+          "type": "string",
+          "description": "Optional receipt image URI"
+        },
+        "receiptNote": {
+          "type": "string",
+          "description": "Optional receipt itemized breakdown"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when record was synced"
+        }
+      },
+      "required": ["id", "userId", "title", "amount", "type", "category", "dateMillis", "paymentMethod"]
+    },
+    "CategoryBudget": {
+      "title": "CategoryBudget",
+      "description": "Monthly budget limit for a category",
+      "type": "object",
+      "properties": {
+        "category": {
+          "type": "string",
+          "description": "Category name"
+        },
+        "monthlyLimit": {
+          "type": "number",
+          "description": "Monthly budget limit"
+        },
+        "userId": {
+          "type": "string",
+          "description": "The user ID of the owner"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of update"
+        }
+      },
+      "required": ["category", "monthlyLimit", "userId"]
+    },
+    "UserBackupMeta": {
+      "title": "UserBackupMeta",
+      "description": "Metadata regarding the user's latest cloud backup status",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The user ID of the owner"
+        },
+        "lastBackupMillis": {
+          "type": "number",
+          "description": "Epoch timestamp of latest backup"
+        },
+        "transactionCount": {
+          "type": "number",
+          "description": "Number of synced transactions"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of update"
+        }
+      },
+      "required": ["userId", "lastBackupMillis", "transactionCount"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserBackupMeta",
+      "description": "User backup metadata document"
+    },
+    "/users/{userId}/transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "Subcollection of transactions belonging to a user"
+    },
+    "/users/{userId}/budgets/{category}": {
+      "schema": "CategoryBudget",
+      "description": "Subcollection of monthly category budgets"
+    }
+  }
+}
